@@ -1,0 +1,46 @@
+package com.example.shop.config;
+
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+@Configuration
+public class BatchSchemaInitializerConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(BatchSchemaInitializerConfig.class);
+    @Autowired
+    private DataSource dataSource;
+
+    @PostConstruct
+    public void initializeBatchSchema() throws SQLException {
+        if (batchTablesExist()) {
+            log.info("Spring Batch tables already exist. Skipping schema initialization.");
+            return;
+        }
+        log.info("Spring Batch tables not found. Executing schema-postgresql.sql");
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator(
+                new ClassPathResource("org/springframework/batch/core/schema-postgresql.sql")
+        );
+        DatabasePopulatorUtils.execute(populator, dataSource);
+    }
+
+    private boolean batchTablesExist() throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            DatabaseMetaData metaData = connection.getMetaData();
+            try (ResultSet tables = metaData.getTables(null, null, "BATCH_JOB_INSTANCE", null)) {
+                return tables.next();
+            }
+        }
+    }
+}

@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface SellerSettlementJpaRepository extends JpaRepository<SellerSettlement, UUID> {
 
     List<SellerSettlement> findByStatus(SettlementStatus status);
+
+    List<SellerSettlement> findByStatusAndSellerId(SettlementStatus status, UUID sellerId);
 }

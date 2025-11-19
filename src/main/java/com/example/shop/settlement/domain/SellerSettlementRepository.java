@@ -9,5 +9,7 @@ public interface SellerSettlementRepository {
 
     List<SellerSettlement> findByStatus(SettlementStatus status);
 
+    List<SellerSettlement> findByStatusAndSeller(SettlementStatus status, UUID sellerId);
+
     void saveAll(List<SellerSettlement> settlements);
 }

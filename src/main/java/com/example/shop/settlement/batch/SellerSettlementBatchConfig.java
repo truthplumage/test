@@ -42,7 +42,18 @@ public class SellerSettlementBatchConfig {
                                SellerSettlementRepository sellerSettlementRepository) {
         return new StepBuilder("settlementStep", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
-                    List<SellerSettlement> pending = sellerSettlementRepository.findByStatus(SettlementStatus.PENDING);
+                    String sellerParam = (String) chunkContext.getStepContext()
+                            .getJobParameters()
+                            .get("sellerId");
+                    List<SellerSettlement> pending;
+                    if (sellerParam != null && !sellerParam.isBlank()) {
+                        pending = sellerSettlementRepository.findByStatusAndSeller(
+                                SettlementStatus.PENDING,
+                                UUID.fromString(sellerParam)
+                        );
+                    } else {
+                        pending = sellerSettlementRepository.findByStatus(SettlementStatus.PENDING);
+                    }
                     if (pending.isEmpty()) {
                         log.info("No pending settlements to process.");
                         return RepeatStatus.FINISHED;

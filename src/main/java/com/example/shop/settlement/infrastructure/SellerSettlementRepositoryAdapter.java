@@ -6,6 +6,7 @@ import com.example.shop.settlement.domain.SettlementStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class SellerSettlementRepositoryAdapter implements SellerSettlementRepository {
@@ -24,6 +25,11 @@ public class SellerSettlementRepositoryAdapter implements SellerSettlementReposi
     @Override
     public List<SellerSettlement> findByStatus(SettlementStatus status) {
         return sellerSettlementJpaRepository.findByStatus(status);
+    }
+
+    @Override
+    public List<SellerSettlement> findByStatusAndSeller(SettlementStatus status, UUID sellerId) {
+        return sellerSettlementJpaRepository.findByStatusAndSellerId(status, sellerId);
     }
 
     @Override
