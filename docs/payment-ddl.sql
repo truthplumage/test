@@ -31,3 +31,14 @@ CREATE TABLE public."payment_failure" (
 );
 
 COMMENT ON TABLE public."payment_failure" IS '결제 실패 로그';
+
+-- 셀러 정산 테이블
+CREATE TABLE public."seller_settlement" (
+    id uuid PRIMARY KEY,
+    seller_id uuid NOT NULL,
+    order_id uuid NOT NULL,
+    amount numeric(15,2) NOT NULL,
+    status varchar(20) NOT NULL,
+    created_at timestamp NOT NULL DEFAULT now(),
+    settled_at timestamp
+);

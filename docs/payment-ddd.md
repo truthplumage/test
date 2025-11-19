@@ -15,7 +15,7 @@
   - `payment.infrastructure.PaymentRepositoryAdapter` + `PaymentJpaRepository`: JPA 구현을 감싼 저장소 어댑터.
   - `payment.infrastructure.PaymentFailureRepositoryAdapter` + `PaymentFailureJpaRepository`: 실패 로그 저장소 어댑터.
 - **Application (Inbound Port)**
-  - `payment.application.PaymentService`: 결제 조회/승인/실패 기록 use case.
+  - `payment.application.PaymentService`: 결제 조회/승인/실패 기록, 주문 정산 레코드 생성.
   - DTOs: `PaymentCommand`(성공 입력), `PaymentInfo`(성공 응답), `PaymentFailCommand`/`PaymentFailureInfo`(실패 기록).
 - **Presentation (Inbound Adapter)**
   - `payment.presentation.PaymentController`: `/api/v1/payments` REST API.
@@ -37,6 +37,7 @@
 | `GET` | `/api/v1/payments` | 결제 내역 페이지 조회 (page/size/ sort 파라미터 지원). |
 | `POST` | `/api/v1/payments/confirm` | 프론트에서 전달한 `paymentKey`, `orderId`, `amount`로 토스 결제 승인 후 DB에 저장. |
 | `POST` | `/api/v1/payments/fail` | 결제 실패 정보를 로그 테이블에 저장. |
+| `POST` | `/api/v1/settlements/run` | 대기 중인 판매자 정산을 Spring Batch로 실행. |
 
 ## 환경 변수
 

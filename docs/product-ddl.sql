@@ -1,6 +1,7 @@
 -- 제품 테이블 정의 (PostgreSQL)
 CREATE TABLE public."product" (
     id uuid PRIMARY KEY,
+    seller_id uuid NOT NULL,
     name varchar(100) NOT NULL,
     description text,
     price numeric(15,2) NOT NULL,
@@ -13,6 +14,7 @@ CREATE TABLE public."product" (
 );
 
 COMMENT ON TABLE public."product" IS '상품 정보';
+COMMENT ON COLUMN public."product".seller_id IS '판매자 ID';
 COMMENT ON COLUMN public."product".id IS '상품 ID';
 COMMENT ON COLUMN public."product".name IS '상품명';
 COMMENT ON COLUMN public."product".description IS '상품 설명';

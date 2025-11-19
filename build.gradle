@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	//DB
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	runtimeOnly 'org.postgresql:postgresql'
 	//lombok
 	compileOnly 'org.projectlombok:lombok'

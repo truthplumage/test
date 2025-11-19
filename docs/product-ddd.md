@@ -4,7 +4,7 @@
 
 ## Domain Layer
 
-- `product.domain.Product`: 상품 엔티티. 생성/수정 시 감사 필드와 기본 상태를 스스로 관리한다.
+- `product.domain.Product`: 상품 엔티티. 판매자(`sellerId`)와 감사 필드를 포함하며 기본 상태를 스스로 관리한다.
 - `product.domain.ProductRepository`: 도메인 관점의 저장소 포트. 애플리케이션 서비스는 이 인터페이스에만 의존한다.
 
 ## Application Layer (Inbound Port)
