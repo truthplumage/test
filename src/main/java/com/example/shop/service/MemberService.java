@@ -7,7 +7,6 @@ import com.example.shop.member.MemberRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,31 +29,28 @@ public class MemberService {
                 request.flag()
         );
         Member member1 = memberRepository.save(member);
-        int cnt = 0;
-        if(member1 instanceof List){
-            cnt = ((List<?>) member1).size();
-        }else{
-            cnt=1;
-        }
-        return new ResponseEntity<>(HttpStatus.OK.value(), member1, cnt);
+        return new ResponseEntity<>(HttpStatus.CREATED.value(), member1, 1);
     }
 
-    public Member update(MemberRequest request, String id) {
-        //TODO: ResponseEntity에 맞게 수정해야함.
-        Member member = new Member(
-                id,
-                request.email(),
-                request.name(),
-                request.password(),
-                request.phone(),
-                request.saltKey(),
-                request.flag()
-        );
-        return memberRepository.save(member);
+    public ResponseEntity<Member> update(MemberRequest request, String id) {
+        UUID uuid = UUID.fromString(id);
+        Member member = memberRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found: " + id));
+
+        member.setEmail(request.email());
+        member.setName(request.name());
+        member.setPassword(request.password());
+        member.setPhone(request.phone());
+        member.setSaltKey(request.saltKey());
+        member.setFlag(request.flag());
+
+        Member updated = memberRepository.save(member);
+        return new ResponseEntity<>(HttpStatus.OK.value(), updated, 1);
     }
 
-    public ResponseEntity<?> delete(String id) {
-        memberRepository.deleteById(UUID.fromString(id));
-        return null;
+    public ResponseEntity<Void> delete(String id) {
+        UUID uuid = UUID.fromString(id);
+        memberRepository.deleteById(uuid);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT.value(), null, 0);
     }
 }
