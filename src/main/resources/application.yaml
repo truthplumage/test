@@ -18,9 +18,12 @@ spring:
         format_sql: ${SPRING_JPA_HIBERNATE_FORMAT_SQL:true}
         jdbc:
           time_zone: ${SPRING_JPA_HIBERNATE_JDBC_TIME_ZONE:Asia/Seoul}
+  batch:
+    jdbc:
+      initialize-schema: always
 
 api:
-  v1: /api/v1
+  v1: ${API_V1:/api/v1}
 
 payment:
   toss:
