@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Toss Payment Demo</title>
+    <script src="https://js.tosspayments.com/v1/payment"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+        #payment-method {
+            margin-top: 1rem;
+            border: 1px solid #e0e0e0;
+            padding: 1rem;
+        }
+        button {
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #3182f6;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Toss 결제 테스트</h1>
+<p>아래 버튼을 클릭하면 Toss Payment Widget이 실행됩니다.</p>
+
+<div id="payment-method"></div>
+<button id="pay-button">결제하기</button>
+
+<script>
+    (async function () {
+        const clientKey = 'test_ck_GePWvyJnrK4jNz4RY2bq8gLzN97E'; // 테스트용 클라이언트 키
+        const customerKey = 'demo-user-001'; // 가맹점에서 관리하는 고객 식별자
+        const orderId = 'ORDER-' + Date.now();
+        const amount = 1000; // 테스트 금액
+
+        const tossPayments = TossPayments(clientKey);
+        const paymentWidget = tossPayments.paymentWidget(customerKey);
+
+        await paymentWidget.renderPaymentMethods('#payment-method', {
+            orderId,
+            amount
+        });
+
+        document.getElementById('pay-button').addEventListener('click', function () {
+            paymentWidget.requestPayment({
+                orderId,
+                amount,
+                orderName: '테스트 상품',
+                successUrl: 'http://localhost:8080/payments/success',
+                failUrl: 'http://localhost:8080/payments/fail'
+            });
+        });
+    })();
+</script>
+</body>
+</html>

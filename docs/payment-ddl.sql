@@ -1,0 +1,19 @@
+-- 결제 테이블 정의 (PostgreSQL)
+CREATE TABLE public."payment" (
+    id uuid PRIMARY KEY,
+    payment_key varchar(200) UNIQUE NOT NULL,
+    order_id varchar(100) NOT NULL,
+    total_amount bigint NOT NULL,
+    method varchar(50),
+    status varchar(20) NOT NULL,
+    requested_at timestamp,
+    approved_at timestamp,
+    fail_reason varchar(255),
+    created_at timestamp NOT NULL DEFAULT now(),
+    updated_at timestamp NOT NULL DEFAULT now()
+);
+
+COMMENT ON TABLE public."payment" IS '결제 정보';
+COMMENT ON COLUMN public."payment".payment_key IS '토스 결제 키';
+COMMENT ON COLUMN public."payment".order_id IS '가맹점 주문 번호';
+COMMENT ON COLUMN public."payment".total_amount IS '결제 금액';
