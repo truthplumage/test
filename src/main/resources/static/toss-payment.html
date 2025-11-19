@@ -28,34 +28,34 @@
 <h1>Toss 결제 테스트</h1>
 <p>아래 버튼을 클릭하면 Toss Payment Widget이 실행됩니다.</p>
 
-<div id="payment-method"></div>
 <button id="pay-button">결제하기</button>
 
 <script>
-    (async function () {
-        const clientKey = 'test_ck_GePWvyJnrK4jNz4RY2bq8gLzN97E'; // 테스트용 클라이언트 키
-        const customerKey = 'demo-user-001'; // 가맹점에서 관리하는 고객 식별자
-        const orderId = 'ORDER-' + Date.now();
-        const amount = 1000; // 테스트 금액
+    document.addEventListener('DOMContentLoaded', async function () {
+        try {
+            if (typeof window.TossPayments !== 'function') {
+                throw new Error('TossPayments is not defined. 스크립트가 로드되었는지 확인하세요.');
+            }
 
-        const tossPayments = TossPayments(clientKey);
-        const paymentWidget = tossPayments.paymentWidget(customerKey);
+            const clientKey = 'test_ck_GePWvyJnrK4jNz4RY2bq8gLzN97E'; // 테스트 클라이언트 키
+            const tossPayments = window.TossPayments(clientKey);
+            const amount = 1000;
 
-        await paymentWidget.renderPaymentMethods('#payment-method', {
-            orderId,
-            amount
-        });
-
-        document.getElementById('pay-button').addEventListener('click', function () {
-            paymentWidget.requestPayment({
-                orderId,
-                amount,
-                orderName: '테스트 상품',
-                successUrl: 'http://localhost:8080/payments/success',
-                failUrl: 'http://localhost:8080/payments/fail'
+            document.getElementById('pay-button').addEventListener('click', function () {
+                tossPayments.requestPayment('간편결제', {
+                    company: '토스페이',
+                    orderId: 'ORDER-' + Date.now(),
+                    amount,
+                    orderName: '테스트 상품',
+                    successUrl: 'http://localhost:8080/payments/success.html',
+                    failUrl: 'http://localhost:8080/payments/fail.html'
+                });
             });
-        });
-    })();
+        } catch (error) {
+            console.error('Toss 위젯 초기화 실패:', error);
+            alert('Toss 위젯을 불러오지 못했습니다. 콘솔을 확인하세요.');
+        }
+    });
 </script>
 </body>
 </html>

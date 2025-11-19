@@ -17,14 +17,22 @@
     const params = new URLSearchParams(window.location.search);
     const info = {};
     params.forEach((value, key) => info[key] = value);
-    document.getElementById('payload').textContent = JSON.stringify(info, null, 2);
+    const payload = {
+        orderId: info.orderId,
+        paymentKey: info.paymentKey,
+        code: info.code,
+        message: info.message,
+        amount: info.amount ? Number(info.amount) : null,
+        rawPayload: JSON.stringify(info)
+    };
+    document.getElementById('payload').textContent = JSON.stringify(payload, null, 2);
 
     async function notifyFailure() {
         try {
             const response = await fetch('/api/v1/payments/fail', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(info)
+                body: JSON.stringify(payload)
             });
             const data = await response.json();
             document.getElementById('result').textContent = JSON.stringify(data, null, 2);
