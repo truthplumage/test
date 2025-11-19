@@ -1,30 +1,30 @@
 package com.example.shop.member;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
-
+@Schema(description = "유저 정보")
 @Data
 @Entity
 @Table(name = "\"member\"", schema = "public")
 public class Member {
 
+    @Schema(description = "유저의 UUID")
     @Id
     private UUID id;
-
+    @Schema(description = "유저의 email")
     @Column(nullable = false, length = 50, unique = true)
     private String email;
-
+    @Schema(description = "유저명")
     @Column(name = "\"name\"", length = 20)
     private String name;
-
+    @Schema(description = "비밀번호")
     @Column(name = "\"password\"", nullable = false, length = 100)
     private String password;
-
+    @Schema(description = "핸드폰번호")
     @Column(nullable = false, length = 20, unique = true)
     private String phone;
 
