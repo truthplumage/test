@@ -17,3 +17,17 @@ COMMENT ON TABLE public."payment" IS '결제 정보';
 COMMENT ON COLUMN public."payment".payment_key IS '토스 결제 키';
 COMMENT ON COLUMN public."payment".order_id IS '가맹점 주문 번호';
 COMMENT ON COLUMN public."payment".total_amount IS '결제 금액';
+
+-- 결제 실패 로그 테이블
+CREATE TABLE public."payment_failure" (
+    id uuid PRIMARY KEY,
+    order_id varchar(100) NOT NULL,
+    payment_key varchar(200),
+    error_code varchar(50),
+    error_message varchar(255),
+    amount bigint,
+    raw_payload text,
+    created_at timestamp NOT NULL DEFAULT now()
+);
+
+COMMENT ON TABLE public."payment_failure" IS '결제 실패 로그';

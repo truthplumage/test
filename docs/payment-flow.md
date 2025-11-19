@@ -36,3 +36,5 @@
 - Toss 개발자 센터의 “테스트 결제 시나리오”를 활용하면 `paymentKey`를 쉽고 안전하게 얻을 수 있다.
 - 서버 실행 전 `.env`의 `TOSS_SECRET_KEY`를 테스트/운영 키로 채우고 `source .env`로 환경 변수 등록을 잊지 말자.
 - DB에 `docs/payment-ddl.sql`로 정의된 `public.payment` 테이블을 미리 생성해야 한다.
+- `src/main/resources/static/toss-payment.html`을 브라우저에서 열면 간단한 테스트 위젯을 확인할 수 있다. 위젯이 리다이렉트한 success URL에서 `paymentKey` 등을 확인한 뒤 `/api/v1/payments/confirm`에 전달하면 된다.
+- 결제 성공/실패 리다이렉트는 `src/main/resources/static/payments/success.html`, `fail.html`로 제공된다. 성공 페이지는 쿼리 파라미터를 자동으로 `/api/v1/payments/confirm`에 전달하고, 실패 페이지는 `/api/v1/payments/fail`로 실패 정보를 전송한 뒤 응답을 화면에 출력한다.
