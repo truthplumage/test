@@ -16,7 +16,7 @@
  ┌──────────────┐    Toss 결제 완료    ┌──────────────────┐
  │PurchaseOrder │───────────────────▶│PaymentService    │
  └─────┬────────┘                    └──────┬───────────┘
-       │       주문 상태 = PAID              │ seller_settlement 생성
+       │       주문 상태 = PAID               │ seller_settlement 생성
        ▼                                    ▼
  ┌──────────────────┐             ┌────────────────────────────┐
  │seller_settlement │◀────────────│SellerSettlement.create(...)│
