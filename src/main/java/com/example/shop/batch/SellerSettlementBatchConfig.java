@@ -1,8 +1,8 @@
-package com.example.shop.settlement.batch;
+package com.example.shop.batch;
 
-import com.example.shop.settlement.domain.SellerSettlement;
-import com.example.shop.settlement.domain.SellerSettlementRepository;
-import com.example.shop.settlement.domain.SettlementStatus;
+import com.example.shop.entity.SellerSettlement;
+import com.example.shop.entity.SettlementStatus;
+import com.example.shop.repository.SellerSettlementRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -56,7 +56,7 @@ public class SellerSettlementBatchConfig {
                             .get("sellerId");
                     List<SellerSettlement> pending;
                     if (sellerParam != null && !sellerParam.isBlank()) {
-                        pending = sellerSettlementRepository.findByStatusAndSeller(
+                        pending = sellerSettlementRepository.findByStatusAndSellerId(
                                 SettlementStatus.PENDING,
                                 UUID.fromString(sellerParam)
                         );

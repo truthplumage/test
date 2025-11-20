@@ -1,4 +1,4 @@
-package com.example.shop.settlement.domain;
+package com.example.shop.entity;
 
 public enum SettlementStatus {
     PENDING,

@@ -11,7 +11,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -40,9 +40,22 @@ public class BatchSchemaInitializerConfig {
 
     private boolean batchTablesExist() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            DatabaseMetaData metaData = connection.getMetaData();
-            try (ResultSet tables = metaData.getTables(null, null, "BATCH_JOB_INSTANCE", null)) {
-                return tables.next();
+            String schema = connection.getSchema();
+            if (schema == null || schema.isBlank()) {
+                schema = "public";
+            }
+            String sql = """
+                    SELECT 1
+                      FROM information_schema.tables
+                     WHERE LOWER(table_schema) = LOWER(?)
+                       AND LOWER(table_name) = LOWER(?)
+                    """;
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, schema);
+                statement.setString(2, "batch_job_instance");
+                try (ResultSet rs = statement.executeQuery()) {
+                    return rs.next();
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.shop.settlement.batch;
+package com.example.shop.batch;
 
 import com.example.shop.seller.domain.SellerRepository;
 import org.slf4j.Logger;

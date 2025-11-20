@@ -1,13 +1,13 @@
-package com.example.shop.settlement.infrastructure;
+package com.example.shop.repository;
 
-import com.example.shop.settlement.domain.SellerSettlement;
-import com.example.shop.settlement.domain.SettlementStatus;
+import com.example.shop.entity.SellerSettlement;
+import com.example.shop.entity.SettlementStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface SellerSettlementJpaRepository extends JpaRepository<SellerSettlement, UUID> {
+public interface SellerSettlementRepository extends JpaRepository<SellerSettlement, UUID> {
 
     List<SellerSettlement> findByStatus(SettlementStatus status);
 

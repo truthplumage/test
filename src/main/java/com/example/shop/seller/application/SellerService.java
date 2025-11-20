@@ -1,6 +1,7 @@
 package com.example.shop.seller.application;
 
 import com.example.shop.common.ResponseEntity;
+import com.example.shop.seller.aop.SellerNotFoundException;
 import com.example.shop.seller.application.dto.SellerCommand;
 import com.example.shop.seller.application.dto.SellerInfo;
 import com.example.shop.seller.domain.Seller;
@@ -46,7 +47,7 @@ public class SellerService {
 
     public ResponseEntity<SellerInfo> update(UUID id, SellerCommand command) {
         Seller seller = sellerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Seller not found: " + id));
+                .orElseThrow(() -> new SellerNotFoundException(id));
 
         seller.update(
                 command.companyName(),
