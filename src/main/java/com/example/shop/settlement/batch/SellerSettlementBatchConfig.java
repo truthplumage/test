@@ -28,6 +28,10 @@ public class SellerSettlementBatchConfig {
 
     private static final Logger log = LoggerFactory.getLogger(SellerSettlementBatchConfig.class);
 
+    /**
+     * 모든 (또는 특정) 판매자의 PENDING 정산을 읽어 상태를 COMPLETED로 바꾸는 Batch Job.
+     * settlementStep 하나로 구성된 간단한 Job이다.
+     */
     @Bean
     public Job sellerSettlementJob(JobRepository jobRepository,
                                    Step settlementStep) {
@@ -36,6 +40,11 @@ public class SellerSettlementBatchConfig {
                 .build();
     }
 
+    /**
+     * 정산 Step: Tasklet 기반으로 PENDING 상태의 정산 레코드를 조회하고
+     * 셀러별 금액 합계를 계산한 뒤 상태를 COMPLETED로 업데이트한다.
+     * JobParameters에 sellerId가 있으면 해당 셀러만 처리한다.
+     */
     @Bean
     public Step settlementStep(JobRepository jobRepository,
                                PlatformTransactionManager transactionManager,

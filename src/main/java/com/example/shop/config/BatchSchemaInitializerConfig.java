@@ -15,6 +15,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Spring Batch 메타 테이블이 없을 경우 자동으로 schema-postgresql.sql을 실행해 초기화한다.
+ */
 @Configuration
 public class BatchSchemaInitializerConfig {
 

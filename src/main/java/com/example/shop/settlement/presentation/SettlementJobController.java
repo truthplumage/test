@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST 엔드포인트로 정산 배치를 수동 실행하는 컨트롤러.
+ * /run/all 은 전체 판매자, /run/seller 는 특정 판매자만 처리한다.
+ */
 @RestController
 @RequestMapping("${api.v1}/settlements")
 public class SettlementJobController {

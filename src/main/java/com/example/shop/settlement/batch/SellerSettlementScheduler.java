@@ -29,6 +29,9 @@ public class SellerSettlementScheduler {
     private final ThreadPoolTaskExecutor settlementTaskExecutor;
     private final boolean settlementAsyncEnabled;
 
+    /**
+     * 정산 스케줄러 생성자. 비동기 실행 여부와 스레드 풀을 주입받는다.
+     */
     public SellerSettlementScheduler(JobLauncher jobLauncher,
                                      Job sellerSettlementJob,
                                      SellerRepository sellerRepository,
@@ -41,9 +44,7 @@ public class SellerSettlementScheduler {
         this.settlementAsyncEnabled = settlementAsyncEnabled;
     }
 
-    /**
-     * 매일 00시에 모든 판매자별 배치를 순차 실행한다.
-     */
+    /** 매일 00시에 모든 판매자의 정산 배치를 실행한다. (페이지 단위로 순차/병렬 실행) */
     @Scheduled(cron = "${spring.task.scheduling.cron.settlement}")
     public void runMidnightSettlements() {
         Pageable pageable = Pageable.ofSize(100);
@@ -61,6 +62,10 @@ public class SellerSettlementScheduler {
         } while (page.hasNext());
     }
 
+    /**
+     * sellerId에 대해 정산 Job을 실행한다.
+     * 비동기 설정 시 별도의 스레드에서 실행하고, 아니면 동기 실행한다.
+     */
     private void runJobForSeller(UUID sellerId) {
         try {
             Runnable executeJob = () -> {
