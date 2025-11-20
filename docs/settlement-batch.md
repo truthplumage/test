@@ -91,3 +91,8 @@
 - 실제 송금 API 연동 시 Tasklet에서 외부 결제/정산 시스템 호출
 - 셀러별 정산 이력 조회 API 추가
 - 배치 스케줄링 (현재는 수동 API 트리거)
+
+### 참고: Spring Batch 스키마 초기화
+- Spring Boot 3.x 기준 `spring.batch.jdbc.initialize-schema` 기본값은 `embedded`여서 **임베디드 DB(H2 등)** 에서만 `schema-*.sql`이 자동 실행된다.
+- PostgreSQL/MySQL 등 외부 DB에서는 `spring.batch.jdbc.initialize-schema=always`를 명시하거나, 프로젝트처럼 `ResourceDatabasePopulator`로 직접 실행해야 한다.
+- 실행에 사용하는 스크립트는 클래스패스 `org/springframework/batch/core/schema-postgresql.sql`에 들어 있으며, `spring-batch-core` 의존성이 있으면 `ClassPathResource`로 바로 읽어올 수 있다. 또는 자체 SQL을 작성해 `src/main/resources`에 넣고 `ResourceDatabasePopulator`로 읽는 방법도 가능하다.
