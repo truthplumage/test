@@ -2,9 +2,10 @@ package com.example.shop.payment.client;
 
 import com.example.shop.payment.application.dto.PaymentCommand;
 import com.example.shop.payment.client.dto.TossPaymentResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -15,46 +16,41 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Component
 public class TossPaymentClient {
 
     private static final String CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
 
     private final RestTemplate restTemplate;
-    private final TossPaymentProperties properties;
-
-    public TossPaymentClient(RestTemplate restTemplate, TossPaymentProperties properties) {
-        this.restTemplate = restTemplate;
-        this.properties = properties;
-    }
-
-    public TossPaymentResponse confirm(PaymentCommand command) {
-        if (properties.getSecretKey() == null || properties.getSecretKey().isBlank()) {
+    @Value("payment.toss.secret-key")
+    private String secretKey;
+    public TossPaymentResponse confirm(PaymentCommand command) throws HttpStatusCodeException{
+        if(secretKey == null){
             throw new IllegalStateException("Toss secret key is not configured");
         }
+        //토스에 요청할 header
         HttpHeaders headers = createHeaders();
-
         Map<String, Object> body = new HashMap<>();
         body.put("paymentKey", command.paymentKey());
         body.put("orderId", command.orderId());
         body.put("amount", command.amount());
-
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
-
-        try {
-            return restTemplate.postForObject(CONFIRM_URL, entity, TossPaymentResponse.class);
-        } catch (HttpStatusCodeException ex) {
-            HttpStatusCode statusCode = ex.getStatusCode();
-            String responseBody = ex.getResponseBodyAsString();
-            throw new IllegalStateException("Toss confirm failed (" + statusCode + "): " + responseBody, ex);
-        }
+        return restTemplate.postForObject(CONFIRM_URL, entity, TossPaymentResponse.class);
     }
 
+    /**
+     * 토스에 전달하는 헤더값<br>
+     * 헤더 생성 함수
+     * @return
+     */
     private HttpHeaders createHeaders() {
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();//headers 생성
         headers.setContentType(MediaType.APPLICATION_JSON);
-        String auth = properties.getSecretKey() + ":";
+        String auth = secretKey + ":";
+        //secretkey base64 Encode
         String encoded = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
+        //Authorization header에 인코딩 값 입력.
         headers.set(HttpHeaders.AUTHORIZATION, "Basic " + encoded);
         return headers;
     }

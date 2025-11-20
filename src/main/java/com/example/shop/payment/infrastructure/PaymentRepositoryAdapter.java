@@ -2,6 +2,8 @@ package com.example.shop.payment.infrastructure;
 
 import com.example.shop.payment.domain.Payment;
 import com.example.shop.payment.domain.PaymentRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -11,12 +13,8 @@ import java.util.UUID;
 
 @Repository
 public class PaymentRepositoryAdapter implements PaymentRepository {
-
-    private final PaymentJpaRepository paymentJpaRepository;
-
-    public PaymentRepositoryAdapter(PaymentJpaRepository paymentJpaRepository) {
-        this.paymentJpaRepository = paymentJpaRepository;
-    }
+    @Autowired
+    private PaymentJpaRepository paymentJpaRepository;
 
     @Override
     public Page<Payment> findAll(Pageable pageable) {
