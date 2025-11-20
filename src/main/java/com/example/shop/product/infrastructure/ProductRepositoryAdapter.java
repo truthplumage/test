@@ -2,6 +2,7 @@ package com.example.shop.product.infrastructure;
 
 import com.example.shop.product.domain.Product;
 import com.example.shop.product.domain.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -11,12 +12,8 @@ import java.util.UUID;
 
 @Repository
 public class ProductRepositoryAdapter implements ProductRepository {
-
-    private final ProductJpaRepository productJpaRepository;
-
-    public ProductRepositoryAdapter(ProductJpaRepository productJpaRepository) {
-        this.productJpaRepository = productJpaRepository;
-    }
+    @Autowired
+    private ProductJpaRepository productJpaRepository;
 
     @Override
     public Page<Product> findAll(Pageable pageable) {
@@ -37,4 +34,6 @@ public class ProductRepositoryAdapter implements ProductRepository {
     public void deleteById(UUID id) {
         productJpaRepository.deleteById(id);
     }
+
+
 }

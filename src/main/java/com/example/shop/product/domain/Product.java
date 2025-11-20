@@ -6,11 +6,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 @Entity
 @Table(name = "\"product\"", schema = "public")
 public class Product {
@@ -121,43 +123,4 @@ public class Product {
         }
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public UUID getRegId() {
-        return regId;
-    }
-
-    public LocalDateTime getRegDt() {
-        return regDt;
-    }
-
-    public UUID getModifyId() {
-        return modifyId;
-    }
-
-    public LocalDateTime getModifyDt() {
-        return modifyDt;
-    }
 }
