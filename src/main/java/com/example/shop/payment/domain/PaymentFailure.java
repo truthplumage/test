@@ -33,7 +33,7 @@ public class PaymentFailure {
     private Long amount;
 
     @Lob
-    @Column(name = "raw_payload")
+    @Column(name = "raw_payload", columnDefinition = "TEXT")
     private String rawPayload;
 
     @Column(name = "created_at", nullable = false)

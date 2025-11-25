@@ -1,40 +1,29 @@
+server:
+  port: 0 # random port
+
 spring:
   application:
-    name: ${SPRING_APPLICATION_NAME:shop}
-  datasource:
-    # Postgres 서버 타임존을 서울(KST)로 맞추기 위해 옵션 추가
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/test?currentSchema=public&options=-c%20TimeZone=Asia/Seoul}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.postgresql.Driver}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
-  jackson:
-    time-zone: ${SPRING_JACKSON_TIME_ZONE:Asia/Seoul}
-  jpa:
-    hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
-    show-sql: ${SPRING_JPA_SHOW_SQL:true}
-    properties:
-      hibernate:
-        format_sql: ${SPRING_JPA_HIBERNATE_FORMAT_SQL:true}
-        jdbc:
-          time_zone: ${SPRING_JPA_HIBERNATE_JDBC_TIME_ZONE:Asia/Seoul}
-  batch:
-    jdbc:
-      initialize-schema: always
-  task:
-    scheduling:
-      cron:
-        settlement: ${SETTLEMENT_CRON:-}
+    name: shop-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  profiles:
+    active: default       # 사용할 프로파일
+  cloud:
+    config:
+      fail-fast: true
 
-api:
-  v1: ${API_V1:/api/v1}
-settlement:
-  async:
-    enabled: ${SETTLEMENT_ASYNC:false}
-    pool-size: ${SETTLEMENT_ASYNC_POOL_SIZE:5}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, info, prometheus
 
-payment:
-  toss:
-    secret-key: ${TOSS_SECRET_KEY:}
-    success-url: ${TOSS_SUCCESS_URL:http://localhost:8080/payments/success.html}
-    fail-url: ${TOSS_FAIL_URL:http://localhost:8080/payments/fail.html}
+kafka:
+  # 로컬 도커 브로커 포트
+  bootstrap-servers: localhost:29092
+  topic:
+    # 주문 이벤트를 주고받는 토픽 이름
+    async-orders: shop.async-orders.v1
+  consumer:
+    # 샘플 컨슈머 그룹
+    group-id: shop-async-consumer

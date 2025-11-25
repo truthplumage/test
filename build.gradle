@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.7'
+	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -17,10 +17,13 @@ java {
 repositories {
 	mavenCentral()
 }
-
+ext {
+	set('springCloudVersion', "2024.0.2")
+}
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.kafka:spring-kafka'
 	//DB
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
@@ -32,6 +35,18 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	//MSA
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'//discovery에 살아있는지 여부에 대한 서버 정보 전달.
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'//eureka 연결 라이브러리
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'//config 정보 연결.
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'//bootstrap.yaml을 읽어와서 먼저 적용하기 위한 라이브러리
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 tasks.named('test') {

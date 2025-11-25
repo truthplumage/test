@@ -40,8 +40,20 @@ public class BatchSchemaInitializerConfig {
 
     private boolean batchTablesExist() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
+            String schema = connection.getSchema();
+            if (schema == null || schema.isBlank()) {
+                schema = "public";
+            }
+
             DatabaseMetaData metaData = connection.getMetaData();
-            try (ResultSet tables = metaData.getTables(null, null, "BATCH_JOB_INSTANCE", null)) {
+            String tableName = "batch_job_instance";
+            if (metaData.storesUpperCaseIdentifiers()) {
+                tableName = tableName.toUpperCase();
+            } else if (metaData.storesMixedCaseIdentifiers()) {
+                tableName = "Batch_Job_Instance";
+            }
+
+            try (ResultSet tables = metaData.getTables(connection.getCatalog(), schema, tableName, new String[]{"TABLE"})) {
                 return tables.next();
             }
         }

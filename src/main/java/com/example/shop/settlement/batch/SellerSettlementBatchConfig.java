@@ -73,7 +73,7 @@ public class SellerSettlementBatchConfig {
                                     SellerSettlement::getSellerId,
                                     Collectors.reducing(BigDecimal.ZERO, SellerSettlement::getAmount, BigDecimal::add)
                             ));
-
+                    //TODO:은행 API 활용해서 정산을 진행한 후에 Complete형태로 수정.
                     pending.forEach(SellerSettlement::markCompleted);
                     sellerSettlementRepository.saveAll(pending);
 

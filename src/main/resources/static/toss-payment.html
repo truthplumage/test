@@ -28,15 +28,15 @@
 <h1>Toss 결제 테스트</h1>
 <p>아래 버튼을 클릭하면 Toss Payment Widget이 실행됩니다.</p>
 
-<label>
-    상품 ID:
-    <input type="text" id="product-id" placeholder="상품 UUID">
-</label>
-<br/>
-<label>
-    구매자 ID:
-    <input type="text" id="member-id" placeholder="구매자 UUID">
-</label>
+<!--<label>-->
+<!--    상품 ID:-->
+<!--    <input type="text" id="product-id" placeholder="상품 UUID">-->
+<!--</label>-->
+<!--<br/>-->
+<!--<label>-->
+<!--    구매자 ID:-->
+<!--    <input type="text" id="member-id" placeholder="구매자 UUID">-->
+<!--</label>-->
 <br/>
 <button id="pay-button">주문 생성 후 결제하기</button>
 
@@ -52,17 +52,17 @@
             const amount = 1000;
 
             document.getElementById('pay-button').addEventListener('click', async function () {
-                const orderId = await createOrder();
-                if (!orderId) {
-                    return;
-                }
+                //const orderId = await createOrder();
+                //if (!orderId) {
+                 //   return;
+               // }
                 tossPayments.requestPayment('간편결제', {
                     company: '토스페이',
-                    orderId,
+                    orderId: 'order-123',
                     amount,
                     orderName: '테스트 상품',
-                    successUrl: 'http://localhost:8080/payments/success.html',
-                    failUrl: 'http://localhost:8080/payments/fail.html'
+                    successUrl: 'http://localhost:8000/shop-service/payments/success.html',
+                    failUrl: 'http://localhost:8000/shop-service/payments/fail.html'
                 });
             });
 
