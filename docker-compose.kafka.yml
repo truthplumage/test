@@ -7,6 +7,9 @@ services:
       # 호스트 29092 -> 컨테이너 PLAINTEXT_HOST
       - "29092:29092"
     environment:
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
       # KRaft 모드(컨트롤러+브로커) 설정
       - KAFKA_NODE_ID=0
       - KAFKA_PROCESS_ROLES=controller,broker
