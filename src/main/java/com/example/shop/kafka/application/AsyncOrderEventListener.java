@@ -1,15 +1,16 @@
 package com.example.shop.kafka.application;
 
 import com.example.shop.kafka.dto.AsyncOrderEvent;
-import java.time.Duration;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class AsyncOrderEventListener {
@@ -24,6 +25,8 @@ public class AsyncOrderEventListener {
             containerFactory = "asyncOrderKafkaListenerContainerFactory"
     )
     public void handle(AsyncOrderEvent event) {
+        System.out.println("handle" + event.orderId());
+        log.info("handle {}", event.orderId());
         CompletableFuture
                 .runAsync(() -> simulateComplexOperation(event), workerPool)
                 .exceptionally(ex -> {

@@ -8,6 +8,10 @@ spring:
     import: optional:configserver:http://localhost:8888
   profiles:
     active: default       # 사용할 프로파일
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 1s
+    socket-timeout: 3s
   cloud:
     config:
       fail-fast: true
@@ -17,13 +21,3 @@ management:
     web:
       exposure:
         include: refresh, health, beans, info, prometheus
-
-kafka:
-  # 로컬 도커 브로커 포트
-  bootstrap-servers: localhost:29092
-  topic:
-    # 주문 이벤트를 주고받는 토픽 이름
-    async-orders: shop.async-orders.v1
-  consumer:
-    # 샘플 컨슈머 그룹
-    group-id: shop-async-consumer
